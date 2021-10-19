@@ -1,0 +1,254 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>WebSocketInfo</title>
+    <style>
+
+        html, body{
+            height: 100%;
+        }
+
+        input[type="button"], input[type="text"], textarea {
+            margin-bottom: 10px;
+        }
+
+        input[type="text"], textarea, .control-style {
+            width: 100%;
+            display: block;
+        }
+
+        textarea {
+            height: 150px;
+        }
+
+        .element-style {
+            word-break: break-all;
+            width: 55%;
+            border-radius: 5px;
+            margin: 0 0 10px 0;
+            padding: 4px;
+            color: white;
+        }
+
+        .element-parent {
+            display: inline-block;
+            width: 100%;
+        }
+
+        .row {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            flex-direction: column;
+        }
+
+        .col-6 {
+            -ms-flex: 0 0 50%;
+            flex: 0 0 50%;
+            max-width: 50%;
+            width: calc(50% - 30px);
+            position: relative;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+
+        .h-full{
+            height: 100%;
+        }
+
+        .control-style{
+            max-height: 100%;
+            overflow-y: auto;
+        }
+
+        .p-t-15{
+            padding-top: 15px;
+        }
+
+    </style>
+</head>
+<body>
+    <h2>WebSocket info</h2>
+    <div>
+        <h3>Connection setup</h3>
+        <div>
+            @*// TODO : ADD PROJECT NAME AND DOCUMENTATION*@
+            <p><label>DEV - </label><span>wss:// @*PROJECTNAME*@ .dev.cleveroad.com/webSocketInfo</span></p>
+            <p><label>STAGE - </label><span>wss:// @*PROJECTNAME*@ .stage.cleveroad.com/webSocketInfo</span></p>
+        </div>
+    </div>
+    <div>
+        <h3>List of all sockets</h3>
+        <div>
+            @*DOCUMENTATION LINK*@
+            <p><a href="" target="_blank"></a></p>
+        </div>
+    </div>
+    <div class="h-full row">
+            <div class="col-6">
+                <h3>Connection example (js)</h3>
+                <pre>
+socket = new WebSocket(uri, access_token); //access_token without 'Bearer'
+
+socket.onopen = function (event) {
+var date = new Date();
+    console.log(date.toTimeString() + " opened connection to " + uri);
+};
+socket.onclose = function (event) {
+var date = new Date();
+    console.log(date.toTimeString() + " closed connection from " + uri);
+};
+socket.onmessage = function(event) {
+    console.log(event.data);
+};
+socket.onerror = function(event) {
+    console.log("error: " + event.data);
+};
+        </pre>
+                <div>
+                    <h3>Connection state</h3>
+                    <input type="text" id="uri" placeholder="URI" />
+                    <input type="text" id="accessToken" placeholder="Access token" />
+                    <input type="button" id="connect" value="Connect" onclick="connect()" />
+                    <input type="button" id="ping" value="Ping" />
+                    <input type="button" id="disconnect" value="Disconnect" />
+                    <textarea id="messageInput" placeholder="Type your message"></textarea>
+                    <input type="button" id="sendButton" value="Send">
+                </div>
+        </div>
+        <div class="col-6">
+            <div class="control-style p-t-15" id="events"></div>
+        </div>
+    </div>
+    <script>
+        var port = "49000";
+        var devPort = "1310";
+        var stagePort = "1312";
+
+        var isTestGroup = false;
+
+        // Change port for dev/stage
+        if (window.location.hostname.includes("dev"))
+            port = devPort;
+        else if (window.location.hostname.includes("stage"))
+            port = stagePort;
+
+        var urlInput = document.getElementById('uri');
+        var button = document.getElementById("sendButton");
+        var messageInput = document.getElementById("messageInput");
+
+        // Set default url input value
+        var prefix = location.protocol === "https:" ? "wss" : "ws";
+        urlInput.value = `${prefix}://${window.location.hostname.replace(/(^\w+:|^)\/\//, '')}:${port}/webSocket`;
+
+        var events = document.getElementById('events');
+
+        function getDate() {
+            var date = new Date();
+            var hours = date.getHours()
+            var minutes = date.getMinutes();
+            var seconds = date.getSeconds();
+
+            return (hours > 9 ? hours : '0' + hours) + ':' + (minutes > 9 ? minutes : '0' + minutes) + ':' + (seconds > 9 ? seconds : '0' + seconds);
+        }
+
+        // Add and style element
+        function addElementToEvent(data, isReceived = false) {
+            var element = document.createElement('p');
+            element.style.cssFloat = isReceived ? "right" : "left";
+
+            var color = isReceived ? "#087ffe" : "#03ce4a";
+            element.style.border = `2px solid ${color}`;
+            element.style.background = color;
+            element.className += "element-style";
+            element.innerHTML = `${getDate()} ${data}`;
+
+            var parent = document.createElement('div');
+            parent.className += "element-parent";
+            parent.appendChild(element);
+            events.appendChild(parent);
+        }
+
+        function connect() {
+            socket = new WebSocket(document.getElementById('uri').value, document.getElementById('accessToken').value.replace('bearer ', '').replace('Bearer ', '')); //access_token without 'Bearer'
+
+            socket.onopen = function (event) {
+                addElementToEvent('Oppened!');
+            };
+
+            socket.onclose = function (event) {
+                addElementToEvent(`Closed! Code: ${event.code}`);
+            };
+
+            socket.onmessage = function (event) {
+                var data = JSON.parse(event.data);
+
+                if (data.eventType == 'online_status_changed') {
+                    isTestGroup = data.data && data.data.UserId && data.data.UserId < 0;
+                    return;
+                }
+
+                if (data.eventType != "typing")
+                    addElementToEvent(event.data, true);
+            };
+
+            socket.onerror = function (event) {
+                addElementToEvent(event.data == null ? "Error" : event.data);
+            };
+        }
+
+        function disconnect() {
+            socket.close()
+        }
+
+        function sendMessage(message) {
+            socket.send(message);
+
+            addElementToEvent(message);
+        }
+
+        button.addEventListener("click", function () {
+            var input = document.getElementById("messageInput");
+
+            if (!input.value == "") {
+                if (isTestGroup) {
+                    socket.send(JSON.stringify({ 'eventType': 'message', 'data': input.value }));
+                    return;
+                }
+
+                sendMessage(input.value);
+            }
+
+            input.value = "";
+        });
+
+        document.getElementById('ping').addEventListener("click", function () {
+            sendMessage('{"eventType":"ping","data":null}');
+        });
+
+        document.getElementById('disconnect').addEventListener("click", function () {
+            disconnect();
+        });
+
+        var typingMessageSent = false;
+
+        messageInput.oninput = function () {
+            if (this.value.length > 0 && !typingMessageSent) {
+                typingMessageSent = true;
+                setTimeout(function () {
+                    if (messageInput.value.length > 0) {
+                        socket.send(JSON.stringify({ 'eventType': 'typing', 'data': null }));
+                    }
+                    typingMessageSent = false;
+                }, 2000);
+            }
+        };
+
+    </script>
+</body>
+</html>

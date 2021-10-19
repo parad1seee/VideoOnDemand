@@ -1,0 +1,95 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\net5.0\VideoOnDemand.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AWSSDK.Core" Version="3.7.1" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.0.45" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.22" />
+    <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.2.22" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NLog" Version="4.7.10" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.13.0" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
+    <PackageReference Include="StackExchange.Redis.Extensions.AspNetCore" Version="7.1.1" />
+    <PackageReference Include="StackExchange.Redis.Extensions.Core" Version="7.1.1" />
+    <PackageReference Include="StackExchange.Redis.Extensions.Newtonsoft" Version="7.1.1" />
+    <PackageReference Include="Stripe.net" Version="39.61.0" />
+    <PackageReference Include="Swashbuckle.Aspnetcore.annotations" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.Aspnetcore.swagger" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.Aspnetcore.swaggergen" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.Aspnetcore.swaggerui" Version="6.1.4" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.0" />
+    <PackageReference Include="Twilio.AspNet.Core" Version="5.37.2" />
+    <PackageReference Include="Wangkanai.Detection" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VideoOnDemand.Common\VideoOnDemand.Common.csproj" />
+    <ProjectReference Include="..\VideoOnDemand.DAL\VideoOnDemand.DAL.csproj" />
+    <ProjectReference Include="..\VideoOnDemand.Domain\VideoOnDemand.Domain.csproj" />
+    <ProjectReference Include="..\VideoOnDemand.Models\VideoOnDemand.Models.csproj" />
+    <ProjectReference Include="..\VideoOnDemand.PdfGenerator\VideoOnDemand.PdfGenerator.csproj" />
+    <ProjectReference Include="..\VideoOnDemand.Redis\VideoOnDemand.Redis.csproj" />
+    <ProjectReference Include="..\VideoOnDemand.ResourceLibrary\VideoOnDemand.ResourceLibrary.csproj" />
+    <ProjectReference Include="..\VideoOnDemand.ScheduledTasks\VideoOnDemand.ScheduledTasks.csproj" />
+    <ProjectReference Include="..\VideoOnDemand.Services\VideoOnDemand.Services.csproj" />
+    <ProjectReference Include="..\VideoOnDemand.WebSockets\VideoOnDemand.WebSockets.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\EmailTemplates\ConfirmEmail.html" />
+    <None Include="wwwroot\EmailTemplates\Registration.html" />
+    <None Include="wwwroot\EmailTemplates\ResetPassword.html" />
+    <None Include="wwwroot\HtmlContentTemplates\HtmlLayout.html" />
+    <None Include="wwwroot\Swagger\swagger-ui.style.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Properties_4launchSettings_1json__JSONSchema="" />
+    </VisualStudio>
+  </ProjectExtensions>
+
+</Project>

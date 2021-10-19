@@ -1,0 +1,9 @@
+/VideoOnDemand/appsettings.json
+/**/Logs
+/**/*.csproj.user
+/**/*.DotSettings.user
+/**/bin
+/**/obj
+/**/.vs
+/**/logs
+/**/start.sh

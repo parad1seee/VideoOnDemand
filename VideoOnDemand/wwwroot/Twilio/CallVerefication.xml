@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Response>
+  <Gather timeout="60" numDigits="4" action="https://81949c8f.ngrok.io/api/v1/TwilioCall/webhook" method="GET">
+    <Say>Please, enter the code sent too you earlier</Say>
+  </Gather>
+</Response>
